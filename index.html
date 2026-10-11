@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ular Tangga Narrative Text</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@500;700&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#fff4d6;--card:#fff;--ink:#2b2350;--muted:#6b6490;--a:#f4b942;--b:#ef6f6c;--c:#3fb8af;--d:#7a6cf0;--c1:#ffe9a8;--c2:#d9f3ef;--line:#2b2350}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1838;--card:#2a2350;--ink:#f6f1ff;--muted:#b9b0e0;--c1:#4a3f7a;--c2:#2f5b66;--line:#f6f1ff}}
+:root[data-theme="dark"]{--bg:#1d1838;--card:#2a2350;--ink:#f6f1ff;--muted:#b9b0e0;--c1:#4a3f7a;--c2:#2f5b66;--line:#f6f1ff}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Baloo 2","Trebuchet MS","Comic Sans MS",system-ui,sans-serif;min-height:100%}
+h1{margin:0;font-size:clamp(1.4rem,4vw,2rem)}
+.wrap{max-width:1000px;margin:0 auto;padding:12px;display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:860px){.wrap{grid-template-columns:minmax(0,560px) 1fr;align-items:start}header{grid-column:1/-1}}
+header{text-align:center}
+header p{margin:2px 0 0;color:var(--muted)}
+.board{position:relative;width:100%;aspect-ratio:1;border:4px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+.grid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(10,1fr);grid-template-rows:repeat(10,1fr)}
+.cell{position:relative;font-size:clamp(.5rem,1.7vw,.8rem);font-weight:700;padding:2px 3px;display:flex;flex-wrap:wrap;align-content:flex-end;justify-content:center;gap:1px}
+.cell:nth-child(odd){background:var(--c1)}.cell:nth-child(even){background:var(--c2)}
+.cell.star{background:var(--a);color:#2b2350}
+.cell .n{position:absolute;top:1px;left:3px;opacity:.75}
+.tok{width:clamp(10px,2.6vw,18px);aspect-ratio:1;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #2b2350;z-index:3}
+svg.over{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.panel{background:var(--card);border:3px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:12px}
+.players{display:grid;gap:8px}
+.pl{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;border:3px solid transparent;background:var(--c1)}
+.pl.on{border-color:var(--line);background:var(--a);color:#2b2350;transform:scale(1.02)}
+.pl .dot{width:22px;height:22px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #2b2350;flex:none}
+.pl b{flex:1}.pl span{font-size:.9rem}
+.dice{display:flex;align-items:center;gap:14px}
+.die{width:72px;height:72px;border-radius:14px;background:#fff;color:#2b2350;border:3px solid var(--line);display:grid;place-items:center;font-size:2.6rem;font-weight:800}
+.die.roll{animation:sh .25s infinite}
+@keyframes sh{50%{transform:rotate(12deg)}}
+button{font:inherit;font-weight:800;border:3px solid var(--line);border-radius:12px;padding:10px 16px;background:var(--b);color:#fff;cursor:pointer;min-height:44px}
+button:disabled{opacity:.5;cursor:not-allowed}
+button:focus-visible{outline:4px solid var(--d);outline-offset:2px}
+.ghost{background:var(--card);color:var(--ink)}
+.msg{min-height:3em;font-weight:700}
+.rules{font-size:.88rem;color:var(--muted);line-height:1.5;margin:0;padding-left:1.1em}
+.modal{position:fixed;inset:0;background:rgba(20,15,50,.7);display:none;place-items:center;padding:14px;z-index:20}
+.modal.open{display:grid}
+.box{background:var(--card);color:var(--ink);border:4px solid var(--line);border-radius:18px;padding:18px;max-width:520px;width:100%;max-height:92vh;overflow:auto}
+.tag{display:inline-block;padding:2px 10px;border-radius:99px;background:var(--d);color:#fff;font-size:.85rem;font-weight:800}
+.q{font-size:1.15rem;font-weight:800;margin:10px 0;line-height:1.35}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:var(--c2);color:var(--ink)}
+.opt.ok{background:#2fb36b;color:#fff}.opt.no{background:#e0524f;color:#fff}
+.exp{margin-top:10px;padding:10px;border-radius:10px;background:var(--c1);line-height:1.45}
+@media(prefers-reduced-motion:reduce){.die.roll{animation:none}}
+.box.wide{max-width:900px}
+.seg{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
+button[aria-pressed=true]{background:var(--d);color:#fff}
+.certw{container-type:inline-size;margin:10px 0}
+.cert{--cb:#fffaf0;--cb2:#fff;--ci:#1f1b4d;--cg:#b8892b;--cs:#5b5690;--cr:#c2453f;position:relative;aspect-ratio:1.414;background:radial-gradient(circle at 50% 30%,var(--cb2),var(--cb));color:var(--ci);border:1.2cqw solid var(--cg);overflow:hidden;font-family:system-ui,sans-serif}
+.cert[data-ct=dark]{--cb:#15123a;--cb2:#262060;--ci:#f8f3ff;--cg:#f4c95d;--cs:#b9b0e0;--cr:#e0605a}
+.cert .strip{position:absolute;top:0;left:0;right:0;height:2.2cqw;background:repeating-linear-gradient(90deg,var(--cg) 0 2.2cqw,transparent 2.2cqw 4.4cqw)}
+.cert .frame{position:absolute;inset:3.2cqw 2cqw 2cqw;border:.25cqw solid var(--cg);display:flex;flex-direction:column;align-items:center;justify-content:space-around;padding:2cqw 5cqw;text-align:center}
+.ct{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:4.6cqw;letter-spacing:.02em}
+.cp{font-size:1.6cqw;color:var(--cs)}
+.cn{font-family:'Great Vibes','Brush Script MT',cursive;font-size:7.5cqw;color:var(--cg);line-height:1.1;border-bottom:.2cqw solid var(--cg);padding:0 4cqw}
+.cd{font-size:1.55cqw;max-width:72%;line-height:1.55}
+.cf{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;width:100%;gap:2cqw;font-size:1.3cqw}
+.cf .l{text-align:left;color:var(--cs);line-height:1.6}.cf .l b{color:var(--ci)}
+.cf .r{text-align:center}
+.seal{width:8cqw}
+.sg{font-family:'Great Vibes','Brush Script MT',cursive;font-size:3.4cqw;color:var(--cg);line-height:1}
+.sl{border-top:.15cqw solid var(--ci);margin:.4cqw 0 .6cqw}
+.r small{display:block;color:var(--cs)}
+@media print{.wrap{display:none}.modal{position:static;background:none;display:block;padding:0}.box{border:0;max-width:none;max-height:none;overflow:visible;padding:0}.noprint{display:none!important}@page{size:A4 landscape;margin:8mm}.cert{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>🐍 Ular Tangga: Narrative Text 🪜</h1><p>Jawab kuis dengan benar untuk naik tangga dan selamat dari ular!</p></header>
+<div class="board" id="board"><div class="grid" id="grid"></div><svg class="over" id="svg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg></div>
+<div class="panel">
+<div class="players" id="players"></div>
+<div class="dice"><div class="die" id="die" aria-live="polite">🎲</div><button id="roll">Lempar dadu</button></div>
+<div class="msg" id="msg" aria-live="polite"></div>
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><label for="np">Pemain:</label>
+<select id="np" style="font:inherit;padding:8px;border-radius:10px"><option>2</option><option>3</option><option>4</option></select>
+<button class="ghost" id="new">Main baru</button></div>
+<ul class="rules"><li>Mendarat di kaki tangga: jawab benar untuk naik.</li><li>Mendarat di kepala ular: jawab benar agar tidak turun.</li><li>Petak bintang ⭐: kuis bonus +10 poin.</li><li>Jawaban benar = +10 poin. Pemenang: pertama sampai petak 100 (harus pas).</li></ul>
+</div>
+</div>
+<div class="modal" id="modal" role="dialog" aria-modal="true"><div class="box" id="box"></div></div>
+<script>
+const LAD={3:22,8:30,28:56,41:79,50:69,71:91}, SNK={99:54,92:51,74:34,62:19,47:16,31:9}, STAR=[12,36,58,84];
+const COL=["#ef6f6c","#3fb8af","#7a6cf0","#f4b942"], NAMES=["Merah","Tosca","Ungu","Kuning"];
+const QS=[
+["What is the main purpose of a narrative text?",["To entertain or amuse the readers","To persuade people to buy","To give instructions","To report news"],0,"A narrative text functions to entertain or amuse the readers."],
+["Which one is NOT a generic structure of a narrative?",["Orientation","Complication","Thesis","Resolution"],2,"Narratives have orientation, complication, resolution and (optional) reorientation. Thesis belongs to argumentative texts."],
+["The Orientation of a narrative introduces …",["the moral value","the main characters, place and time","the problems only","the solution"],1,"Orientation: characters, place and time of the story."],
+["“Once upon a time, there was a fisherman living in North Sumatra.” This sentence belongs to the …",["Complication","Resolution","Orientation","Reorientation"],2,"It introduces the character and the place, so it is the Orientation."],
+["The Complication of a story shows …",["the problems that happen","the title","the writer's comment","the end of the story"],0,"Complication: the problems that happen in the story."],
+["Which part is the end of the story where the problems are solved?",["Orientation","Resolution","Complication","Title"],1,"Resolution is where the problems are solved."],
+["Which structure is optional in a narrative?",["Orientation","Complication","Resolution","Reorientation"],3,"Reorientation (writer's comment or moral value) is optional."],
+["Which tense is mostly used in narrative texts?",["Simple past tense","Simple future tense","Present continuous","Simple present"],0,"Narratives tell past events, so simple past is dominant."],
+["What is the pattern of the past perfect tense?",["is/are + V-ing","will + V1","had + past participle","have + V1"],2,"Past perfect = had + past participle."],
+["When Stanly arrived, the meeting ____ already started.",["has","had","was","have"],1,"An earlier past action uses had + past participle: had already started."],
+["By the time the police arrived, the robbers ____ the jewelry shop.",["had left","leave","were leaving","have left"],0,"The robbers left first: had left."],
+["What is the past participle of “begin”?",["began","begin","begun","beginned"],2,"begin – began – begun."],
+["In “that white tame and exotic bird”, the words white, tame and exotic are …",["verbs","pre-modifiers","conjunctions","adverbs"],1,"They come before the noun and modify it: pre-modifiers of a noun phrase."],
+["Which one is a noun phrase?",["was very happy","quickly ran away","his sharp and shiny long sword","in the morning"],2,"A noun phrase = pre-modifiers + a noun."],
+["In the legend of Lake Toba, why did the mother leave her husband?",["He broke his promise","He was poor","He lost the fish","Sam ran away"],0,"He told their son that she was once a fish, breaking his promise."],
+["Samosir means “Samo diusir”. In English it means …",["Samo who was rich","Samo who had been evicted","Samo the fisherman","Samo's lake"],1,"Samosir = Samo who had been evicted."],
+["In Mah Bongsu's story, which event is part of the Complication?",["Mak Piah became jealous","Once there lived an orphan","The prince married Mah Bongsu","The river was named Sungai Jodoh"],0,"Jealousy creates the problem. The other options are orientation or resolution/reorientation."],
+["What moral value fits the story of Wa Lancar?",["Obey your teachers and do good to others","Never study","Always be jealous","Eat quickly"],0,"Wa Lancar survived because he followed his teachers' advice."],
+["Legends such as Tangkuban Perahu or Tanjung Lesung are examples of …",["narrative texts","procedure texts","announcements","reports"],0,"Legends are narrative texts that entertain and often explain a place's origin."],
+["Which word is a time connective often used in narratives?",["Because","Suddenly","Or","Although"],1,"Suddenly, then, finally, one day… show the sequence of events."]
+];
+let st, pool=[], busy=false;
+const $=id=>document.getElementById(id);
+const rc=n=>{const r=Math.floor((n-1)/10),c=r%2?9-(n-1)%10:(n-1)%10;return{x:c*10+5,y:(9-r)*10+5,r,c}};
+function build(){
+ const g=$("grid");g.innerHTML="";
+ for(let r=9;r>=0;r--)for(let c=0;c<10;c++){const n=r*10+(r%2?9-c:c)+1;const d=document.createElement("div");d.className="cell"+(STAR.includes(n)?" star":"");d.id="c"+n;d.innerHTML='<span class="n">'+(STAR.includes(n)?"⭐":n)+"</span>";g.appendChild(d)}
+ let s="";
+ for(const[a,b]of Object.entries(LAD)){const p=rc(+a),q=rc(b),dx=q.x-p.x,dy=q.y-p.y,L=Math.hypot(dx,dy),nx=-dy/L*1.6,ny=dx/L*1.6;
+  s+=`<g stroke="#8a5a2b" stroke-linecap="round"><line x1="${p.x+nx}" y1="${p.y+ny}" x2="${q.x+nx}" y2="${q.y+ny}" stroke-width="1.1"/><line x1="${p.x-nx}" y1="${p.y-ny}" x2="${q.x-nx}" y2="${q.y-ny}" stroke-width="1.1"/>`;
+  for(let i=1;i<L/3.2;i++){const t=i*3.2/L;s+=`<line x1="${p.x+nx+dx*t}" y1="${p.y+ny+dy*t}" x2="${p.x-nx+dx*t}" y2="${p.y-ny+dy*t}" stroke-width=".8"/>`}s+="</g>"}
+ const sc=["#2fa35b","#d9822b","#7a6cf0","#e0524f","#3fb8af","#a05cc8"];let k=0;
+ for(const[a,b]of Object.entries(SNK)){const h=rc(+a),t=rc(b),dx=t.x-h.x,dy=t.y-h.y,L=Math.hypot(dx,dy),nx=-dy/L,ny=dx/L,col=sc[k++%6];
+  let d=`M${h.x},${h.y}`;const N=6;for(let i=1;i<=N;i++){const f=i/N,w=(i%2?1:-1)*4.2;d+=` Q${h.x+dx*(f-.5/N)+nx*w},${h.y+dy*(f-.5/N)+ny*w} ${h.x+dx*f},${h.y+dy*f}`}
+  s+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="2.6" stroke-linecap="round" opacity=".92"/><circle cx="${h.x}" cy="${h.y}" r="2.2" fill="${col}"/><circle cx="${h.x-.7}" cy="${h.y-.6}" r=".5" fill="#fff"/><circle cx="${h.x+.7}" cy="${h.y-.6}" r=".5" fill="#fff"/><path d="M${h.x},${h.y+2} l-.8,1.6 M${h.x},${h.y+2} l.8,1.6" stroke="#e0524f" stroke-width=".3"/>`}
+ $("svg").innerHTML=s;
+}
+function draw(){
+ document.querySelectorAll(".tok").forEach(e=>e.remove());
+ st.p.forEach((p,i)=>{const t=document.createElement("div");t.className="tok";t.style.background=COL[i];t.title=NAMES[i];$("c"+Math.max(p.pos,1)).appendChild(t)});
+ $("players").innerHTML=st.p.map((p,i)=>`<div class="pl${i===st.t?" on":""}"><i class="dot" style="background:${COL[i]}"></i><b>${NAMES[i]}${i===st.t?" (giliran)":""}</b><span>Petak ${p.pos} · ${p.score} poin</span></div>`).join("");
+}
+function start(){
+ const n=+$("np").value;st={t:0,p:Array.from({length:n},()=>({pos:1,score:0}))};pool=[];busy=false;
+ $("roll").disabled=false;$("die").textContent="🎲";$("msg").textContent="Giliran "+NAMES[0]+". Lempar dadu!";draw();
+}
+function nextQ(){if(!pool.length)pool=QS.map((_,i)=>i).sort(()=>Math.random()-.5);return QS[pool.pop()]}
+function say(t){$("msg").textContent=t}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+async function roll(){
+ if(busy)return;busy=true;$("roll").disabled=true;const d=$("die");d.classList.add("roll");
+ for(let i=0;i<8;i++){d.textContent=1+Math.floor(Math.random()*6);await wait(70)}
+ d.classList.remove("roll");const v=1+Math.floor(Math.random()*6);d.textContent=v;
+ const p=st.p[st.t],nm=NAMES[st.t];
+ if(p.pos+v>100){say(nm+" butuh angka pas untuk sampai 100. Giliran berikutnya.");return endTurn()}
+ for(let i=0;i<v;i++){p.pos++;draw();await wait(220)}
+ await land(p,nm);
+}
+async function land(p,nm){
+ const pos=p.pos;
+ if(pos===100){return win()}
+ if(LAD[pos]){const ok=await quiz("🪜 Tangga! Jawab benar untuk naik ke "+LAD[pos]);
+  if(ok){p.score+=10;say(nm+" naik tangga ke "+LAD[pos]+"! +10 poin");p.pos=LAD[pos];draw();await wait(600);if(p.pos===100)return win()}else say(nm+" salah. Tetap di petak "+pos+".")}
+ else if(SNK[pos]){const ok=await quiz("🐍 Ular! Jawab benar agar tidak turun ke "+SNK[pos]);
+  if(ok){p.score+=10;say(nm+" selamat dari ular! +10 poin")}else{say(nm+" digigit ular, turun ke "+SNK[pos]+"!");p.pos=SNK[pos];draw();await wait(600)}}
+ else if(STAR.includes(pos)){const ok=await quiz("⭐ Petak bintang! Kuis bonus");if(ok){p.score+=10;say(nm+" dapat bonus +10 poin!")}else say("Belum beruntung, "+nm+".")}
+ else say(nm+" berhenti di petak "+pos+".");
+ draw();endTurn();
+}
+function endTurn(){st.t=(st.t+1)%st.p.length;draw();busy=false;$("roll").disabled=false;$("msg").textContent+=" Giliran "+NAMES[st.t]+"."}
+function win(){const w=NAMES[st.t];draw();busy=true;$("box").className="box";const best=[...st.p].map((p,i)=>[p.score,i]).sort((a,b)=>b[0]-a[0])[0][1];
+ $("box").innerHTML=`<h2>🎉 ${w} sampai di petak 100!</h2><p>Skor akhir:</p>${st.p.map((p,i)=>`<p><b>${NAMES[i]}</b>: ${p.score} poin${i===best?" ⭐ skor tertinggi":""}</p>`).join("")}<p><button id="cert">🏆 Buat sertifikat</button> <button class="ghost" id="again">Main lagi</button></p>`;
+ $("modal").classList.add("open");$("again").onclick=()=>{$("modal").classList.remove("open");start()};$("cert").onclick=showCert;say("Selamat, "+w+" menang!")}
+function quiz(title){return new Promise(res=>{
+ $("box").className="box";const q=nextQ(),idx=q[1].map((_,i)=>i).sort(()=>Math.random()-.5);
+ $("box").innerHTML=`<span class="tag">${title}</span><div class="q">${q[0]}</div><div class="opts">${idx.map(i=>`<button class="opt" data-i="${i}">${q[1][i]}</button>`).join("")}</div><div id="fb"></div>`;
+ $("modal").classList.add("open");
+ $("box").querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+  const ok=+b.dataset.i===q[2];
+  $("box").querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(+x.dataset.i===q[2])x.classList.add("ok")});
+  if(!ok)b.classList.add("no");
+  $("fb").innerHTML=`<div class="exp"><b>${ok?"Benar! 🎉":"Belum tepat."}</b> ${q[3]}</div><p><button id="go">Lanjut</button></p>`;
+  $("go").focus();$("go").onclick=()=>{$("modal").classList.remove("open");res(ok)}})
+})}
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const CT={en:{t:"Certificate of Achievement",p:"This certificate is proudly presented to",d:"for winning the educational game <i>Snakes &amp; Ladders: Narrative Text</i> and demonstrating a strong understanding of narrative text: its purpose, generic structure and language features.",s:"Final score",pt:"points",c:"Creator of the Game",dt:"Date",loc:"en-GB"},id:{t:"Sertifikat Penghargaan",p:"Dengan bangga diberikan kepada",d:"atas kemenangannya dalam permainan edukasi <i>Ular Tangga: Narrative Text</i> serta pemahaman yang baik tentang teks narasi: tujuan, struktur, dan kebahasaannya.",s:"Skor akhir",pt:"poin",c:"Pembuat Aplikasi",dt:"Tanggal",loc:"id-ID"}};
+function certHTML(L,T,nm,sc){const c=CT[L],dt=new Date().toLocaleDateString(c.loc,{day:"numeric",month:"long",year:"numeric"});
+return `<div class="cert" data-ct="${T}"><div class="strip"></div><div class="frame"><div class="ct">${c.t}</div><div class="cp">${c.p}</div><div class="cn">${esc(nm)||"…"}</div><div class="cd">${c.d}</div><div class="cf"><div class="l">${c.s}: <b>${sc} ${c.pt}</b><br>${c.dt}: <b>${dt}</b></div><svg class="seal" viewBox="0 0 100 120"><path d="M30 70L20 118l20-13 10 13 5-46z" fill="var(--cr)"/><path d="M70 70l10 48-20-13-10 13-5-46z" fill="var(--cr)"/><circle cx="50" cy="45" r="38" fill="var(--cg)"/><circle cx="50" cy="45" r="31" fill="none" stroke="var(--cb)" stroke-width="2" stroke-dasharray="2 3"/><path d="M50 22l7 15 16 2-12 11 3 16-14-8-14 8 3-16-12-11 16-2z" fill="var(--cb)"/></svg><div class="r"><div class="sg">Ahmad Budi Leksono</div><div class="sl"></div><b>Ahmad Budi Leksono</b><small>${c.c}</small></div></div></div></div>`}
+function showCert(){
+ const w=st.t,sc=st.p[w].score,bx=$("box");let L="en",T="light";
+ bx.className="box wide";
+ bx.innerHTML=`<div class="noprint"><h2 style="margin:0 0 8px">🏆 Sertifikat Pemenang</h2><label>Nama pemenang: <input id="wn" maxlength="40" value="${NAMES[w]}" style="font:inherit;padding:8px;border-radius:10px;width:min(100%,280px)"></label><div class="seg"><span>Tema:</span><button class="ghost" data-t="light">☀️ Terang</button><button class="ghost" data-t="dark">🌙 Gelap</button></div><div class="seg"><span>Bahasa:</span><button class="ghost" data-l="en">English</button><button class="ghost" data-l="id">Indonesia</button></div></div><div class="certw" id="cw"></div><div class="noprint seg"><button id="pr">🖨️ Cetak / Simpan PDF</button><button class="ghost" id="ag">Main lagi</button></div>`;
+ const up=()=>{$("cw").innerHTML=certHTML(L,T,$("wn").value.trim(),sc);bx.querySelectorAll("[data-t]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.t===T));bx.querySelectorAll("[data-l]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===L))};
+ bx.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{T=b.dataset.t;up()});
+ bx.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{L=b.dataset.l;up()});
+ $("wn").oninput=up;$("pr").onclick=()=>{try{window.print()}catch(e){}};
+ $("ag").onclick=()=>{$("modal").classList.remove("open");bx.className="box";start()};
+ up();
+}
+$("roll").onclick=roll;$("new").onclick=start;$("np").onchange=start;
+build();start();
+</script>
+</body>
+</html>
